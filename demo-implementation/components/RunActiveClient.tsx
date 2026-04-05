@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -10,7 +9,6 @@ import {
 import GoogleMapCanvas from "@/components/GoogleMapCanvas";
 
 const TARGET_KM = 10;
-/** 疑似ランで 10km に到達するまでの秒数（デモ用） */
 const DEMO_DURATION_SEC = 180;
 
 function formatTime(totalSec: number): string {
@@ -23,7 +21,7 @@ export default function RunActiveClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const routeId = searchParams.get("routeId");
-  
+
   const [route, setRoute] = useState<any>(null);
   const [started, setStarted] = useState(false);
   const [paused, setPaused] = useState(false);
@@ -77,30 +75,35 @@ export default function RunActiveClient() {
     return clearTimer;
   }, [started, paused, reachedGoal, clearTimer]);
 
-  useEffect(() => {
-    const a = audioRef.current;
-    if (!a) return;
-    if (!started || paused) {
-      a.pause();
-      return;
-    }
-    void a.play().catch(() => {});
-  }, [started, paused]);
-
   const handleStart = () => {
     setStarted(true);
     setPaused(false);
     setElapsedSec(0);
+
     const a = audioRef.current;
     if (a) {
       a.currentTime = 0;
       a.volume = 1.0;
-      void a.play().catch((e) => { console.error("Audio play failed:", e); });
+      const p = a.play();
+      if (p) {
+        p.then(() => {
+          console.log("Audio playback started successfully");
+        }).catch((e) => {
+          console.error("Audio play error:", e);
+        });
+      }
     }
   };
 
   const handlePauseToggle = () => {
-    setPaused((p) => !p);
+    const a = audioRef.current;
+    if (paused) {
+      setPaused(false);
+      if (a) a.play().catch(() => {});
+    } else {
+      setPaused(true);
+      if (a) a.pause();
+    }
   };
 
   const handleComplete = () => {
@@ -117,7 +120,6 @@ export default function RunActiveClient() {
     <main className="flex flex-col h-full bg-slate-900 text-white overflow-hidden relative">
       <audio ref={audioRef} src={DEMO_AUDIO_PATH} preload="auto" />
 
-      {/* Background Map / Decoration */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/40 z-10 pointer-events-none" />
         <GoogleMapCanvas
@@ -163,7 +165,7 @@ export default function RunActiveClient() {
         )}
       </div>
 
-      <div className="relative z-10 py-12 flex flex-col items-center gap-6">
+      <div className="relative z-10 py-12 flex flex-col items-center gap-6 px-6">
         {!started ? (
           <button
             type="button"
