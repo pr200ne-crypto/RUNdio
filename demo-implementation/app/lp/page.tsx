@@ -108,7 +108,7 @@ export default function LpPage() {
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-slate-900/20" />
 
-        <div className="relative z-10 text-center px-6 max-w-3xl">
+        <div className="relative z-10 text-center px-6 max-w-3xl mx-auto flex flex-col items-center">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -121,7 +121,7 @@ export default function LpPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-5xl md:text-8xl font-black leading-[1.05] tracking-tight text-white"
+            className="text-5xl md:text-8xl font-black leading-[1.05] tracking-tight text-white text-center"
           >
             走る。聴く。
             <br />
@@ -131,7 +131,7 @@ export default function LpPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-6 text-lg md:text-xl text-white/80 max-w-xl mx-auto leading-relaxed"
+            className="mt-6 text-lg md:text-xl text-white/80 max-w-xl mx-auto leading-relaxed text-center"
           >
             あなたのペースに合わせたAI実況で、
             毎日のランニングが特別な体験に変わります。
@@ -140,16 +140,16 @@ export default function LpPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
           >
             <button
               onClick={() => document.getElementById('auth')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-10 py-5 bg-blue-600 text-white rounded-full font-bold text-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2 shadow-lg"
+              className="px-10 py-5 bg-blue-600 text-white rounded-full font-bold text-lg hover:bg-blue-700 transition-colors inline-flex items-center justify-center gap-2 shadow-lg w-full sm:w-auto"
             >
               無料ではじめる
               <ArrowRight size={20} />
             </button>
-            <span className="text-sm text-white/50">登録は30秒で完了</span>
+            <span className="text-sm text-white/50 text-center">登録は30秒で完了</span>
           </motion.div>
         </div>
       </section>
@@ -160,7 +160,7 @@ export default function LpPage() {
       <section className="py-24 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
           <FadeIn>
-            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
               <Image
                 src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=960&q=80"
                 alt="Runner checking a route on phone"
@@ -170,13 +170,13 @@ export default function LpPage() {
             </div>
           </FadeIn>
           <FadeIn delay={0.1}>
-            <div>
-              <span className="text-sm font-bold text-blue-500 tracking-wider uppercase">Plan</span>
-              <h2 className="mt-3 text-3xl md:text-5xl font-black text-slate-900 leading-tight">
+            <div className="text-center md:text-left flex flex-col items-center md:items-start">
+              <span className="text-sm font-bold text-blue-500 tracking-wider uppercase bg-blue-50 px-4 py-1.5 rounded-full">Plan</span>
+              <h2 className="mt-6 text-3xl md:text-5xl font-black text-slate-900 leading-tight">
                 好きなルートを、
                 <br />好きなように。
               </h2>
-              <p className="mt-6 text-lg text-slate-500 leading-relaxed">
+              <p className="mt-6 text-lg text-slate-500 leading-relaxed max-w-lg">
                 距離やペースの好みに合わせたルートを選択。ゴール後に立ち寄りたい銭湯やカフェなどのPOIを番組に組み込んで、あなただけの「今日の一本」をプランニングします。
               </p>
             </div>
@@ -190,19 +190,19 @@ export default function LpPage() {
       <section className="py-24 px-6 bg-slate-50">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
           <FadeIn delay={0.1} className="order-2 md:order-1">
-            <div>
-              <span className="text-sm font-bold text-blue-500 tracking-wider uppercase">Run</span>
-              <h2 className="mt-3 text-3xl md:text-5xl font-black text-slate-900 leading-tight">
+            <div className="text-center md:text-left flex flex-col items-center md:items-start">
+              <span className="text-sm font-bold text-blue-500 tracking-wider uppercase bg-blue-100 px-4 py-1.5 rounded-full">Run</span>
+              <h2 className="mt-6 text-3xl md:text-5xl font-black text-slate-900 leading-tight">
                 走りに寄り添う
                 <br />AI実況。
               </h2>
-              <p className="mt-6 text-lg text-slate-500 leading-relaxed">
+              <p className="mt-6 text-lg text-slate-500 leading-relaxed max-w-lg">
                 走行中、AIがリアルタイムにあなただけの番組を生成します。ペースに合わせた応援、近づいてきたスポットの紹介、疲れた時の一言——まるでラジオパーソナリティが隣にいるように。
               </p>
             </div>
           </FadeIn>
           <FadeIn className="order-1 md:order-2">
-            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
               <Image
                 src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=960&q=80"
                 alt="Runner with earphones on a morning jog"
@@ -220,7 +220,7 @@ export default function LpPage() {
       <section className="py-24 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
           <FadeIn>
-            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
               <Image
                 src="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=960&q=80"
                 alt="Runner relaxing at a cafe after a run"
@@ -230,13 +230,13 @@ export default function LpPage() {
             </div>
           </FadeIn>
           <FadeIn delay={0.1}>
-            <div>
-              <span className="text-sm font-bold text-blue-500 tracking-wider uppercase">Review</span>
-              <h2 className="mt-3 text-3xl md:text-5xl font-black text-slate-900 leading-tight">
+            <div className="text-center md:text-left flex flex-col items-center md:items-start">
+              <span className="text-sm font-bold text-blue-500 tracking-wider uppercase bg-blue-50 px-4 py-1.5 rounded-full">Review</span>
+              <h2 className="mt-6 text-3xl md:text-5xl font-black text-slate-900 leading-tight">
                 走るたびに、
                 <br />次が楽しみになる。
               </h2>
-              <p className="mt-6 text-lg text-slate-500 leading-relaxed">
+              <p className="mt-6 text-lg text-slate-500 leading-relaxed max-w-lg">
                 走行データを自動で記録・分析。距離やペースの推移を振り返りながら、次のチャレンジルートや新しいPOIを提案。続けるほどに、ランニングの世界が広がります。
               </p>
             </div>
