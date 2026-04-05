@@ -61,6 +61,7 @@ export default function GoogleMapCanvas({
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: apiKey,
+    libraries: ['places', 'geometry'], // Places API と Geometry ライブラリを追加
   })
 
   useEffect(() => {

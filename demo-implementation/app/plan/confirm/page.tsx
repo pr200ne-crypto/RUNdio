@@ -9,6 +9,7 @@ function PlanConfirmContent() {
   const searchParams = useSearchParams();
   const routeId = searchParams.get("routeId");
   const poiId = searchParams.get("poiId");
+  const poiName = searchParams.get("poiName");
 
   const [route, setRoute] = useState<any>(null);
   const [poi, setPoi] = useState<any>(null);
@@ -20,11 +21,21 @@ function PlanConfirmContent() {
         .then((data) => setRoute(data.find((r: any) => r.id === routeId)));
     }
     if (poiId) {
-      fetch("/data/pois.json")
-        .then((res) => res.json())
-        .then((data) => setPoi(data.find((p: any) => p.id === poiId)));
+      // APIから取得したPOIの場合はURLパラメータから名前を取得して仮のPOIオブジェクトを作成
+      if (poiName) {
+        setPoi({
+          id: poiId,
+          name: decodeURIComponent(poiName),
+          description: "Google Places API から取得した施設"
+        });
+      } else {
+        // フォールバック: ローカルデータから検索
+        fetch("/data/pois.json")
+          .then((res) => res.json())
+          .then((data) => setPoi(data.find((p: any) => p.id === poiId)));
+      }
     }
-  }, [routeId, poiId]);
+  }, [routeId, poiId, poiName]);
 
   if (!route || !poi) return <div className="min-h-screen flex items-center justify-center text-slate-400 font-bold bg-slate-50">読み込み中...</div>;
 
@@ -96,7 +107,7 @@ function PlanConfirmContent() {
       <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-50 via-slate-50 to-transparent z-20">
         <div className="max-w-md mx-auto">
           <Link
-            href={`/run?routeId=${routeId}&poiId=${poiId}`}
+            href={`/run?routeId=${routeId}&poiId=${poiId}&poiName=${encodeURIComponent(poi.name)}`}
             className="flex items-center justify-center w-full py-5 bg-blue-600 text-white rounded-full font-black text-xl shadow-xl shadow-blue-600/20 transition-all active:scale-[0.98] hover:bg-blue-700"
           >
             <Play size={24} fill="currentColor" className="mr-2" />

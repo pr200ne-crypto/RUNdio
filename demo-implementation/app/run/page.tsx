@@ -11,6 +11,7 @@ function RunActiveContent() {
   const router = useRouter();
   const routeId = searchParams.get("routeId");
   const poiId = searchParams.get("poiId");
+  const poiName = searchParams.get("poiName") ? decodeURIComponent(searchParams.get("poiName")!) : "代々木湯";
 
   const [isRunning, setIsRunning] = useState(true);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -60,9 +61,9 @@ function RunActiveContent() {
     // チェックポイント接近 (例: 3km地点で通知)
     if (distanceMeters >= 3000 && !poiAnnounced) {
       setPoiAnnounced(true);
-      speak("まもなくチェックポイントの代々木湯に到着します。ゴール後のひとっ風呂、楽しみですね！");
+      speak(`まもなくチェックポイントの${poiName}に到着します。ゴール後のひとっ風呂、楽しみですね！`);
     }
-  }, [distanceMeters, lastAnnouncedKm, poiAnnounced, speak]);
+  }, [distanceMeters, lastAnnouncedKm, poiAnnounced, speak, poiName]);
 
   const formatTime = (seconds: number) => {
     const h = Math.floor(seconds / 3600);
@@ -159,7 +160,7 @@ function RunActiveContent() {
           </div>
           <div className="text-left flex-1 min-w-0">
             <div className="text-xs font-bold text-blue-200 uppercase tracking-widest mb-0.5">次は</div>
-            <div className="font-bold text-lg truncate">代々木湯</div>
+            <div className="font-bold text-lg truncate">{poiName}</div>
             <div className="text-sm text-blue-100 font-medium">3.0 km 地点</div>
           </div>
         </div>
