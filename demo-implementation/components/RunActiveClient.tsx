@@ -2,12 +2,9 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  DEMO_AUDIO_PATH,
-  milestoneLabelAtKm,
-} from "@/lib/demo-audio";
-import GoogleMapCanvas from "@/components/GoogleMapCanvas";
+import { milestoneLabelAtKm } from "@/lib/demo-audio";
 
+const AUDIO_URL = "/audio/rundio-companion.mp3";
 const TARGET_KM = 10;
 const DEMO_DURATION_SEC = 180;
 
@@ -22,20 +19,12 @@ export default function RunActiveClient() {
   const searchParams = useSearchParams();
   const routeId = searchParams.get("routeId");
 
-  const [route, setRoute] = useState<any>(null);
   const [started, setStarted] = useState(false);
   const [paused, setPaused] = useState(false);
   const [elapsedSec, setElapsedSec] = useState(0);
+  const [audioStatus, setAudioStatus] = useState("");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  useEffect(() => {
-    if (routeId) {
-      fetch("/data/routes.json")
-        .then((res) => res.json())
-        .then((data) => setRoute(data.find((r: any) => r.id === routeId)));
-    }
-  }, [routeId]);
 
   const distanceKm = started
     ? Math.min(TARGET_KM, (elapsedSec / DEMO_DURATION_SEC) * TARGET_KM)
@@ -54,7 +43,10 @@ export default function RunActiveClient() {
   useEffect(() => {
     return () => {
       clearTimer();
-      audioRef.current?.pause();
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
     };
   }, [clearTimer]);
 
@@ -79,19 +71,32 @@ export default function RunActiveClient() {
     setStarted(true);
     setPaused(false);
     setElapsedSec(0);
+    setAudioStatus("読み込み中...");
 
-    const a = audioRef.current;
-    if (a) {
-      a.currentTime = 0;
+    try {
+      const a = new Audio(AUDIO_URL);
       a.volume = 1.0;
-      const p = a.play();
-      if (p) {
-        p.then(() => {
-          console.log("Audio playback started successfully");
-        }).catch((e) => {
-          console.error("Audio play error:", e);
+      audioRef.current = a;
+
+      a.addEventListener("canplaythrough", () => {
+        setAudioStatus("再生中");
+      });
+      a.addEventListener("error", (e) => {
+        setAudioStatus("音声読み込みエラー: " + (a.error?.message || "不明"));
+      });
+      a.addEventListener("ended", () => {
+        setAudioStatus("再生完了");
+      });
+
+      a.play()
+        .then(() => {
+          setAudioStatus("再生中");
+        })
+        .catch((e) => {
+          setAudioStatus("再生エラー: " + e.message);
         });
-      }
+    } catch (e: any) {
+      setAudioStatus("Audio生成エラー: " + e.message);
     }
   };
 
@@ -99,38 +104,37 @@ export default function RunActiveClient() {
     const a = audioRef.current;
     if (paused) {
       setPaused(false);
-      if (a) a.play().catch(() => {});
+      if (a) {
+        a.play().catch(() => {});
+        setAudioStatus("再生中");
+      }
     } else {
       setPaused(true);
-      if (a) a.pause();
+      if (a) {
+        a.pause();
+        setAudioStatus("一時停止");
+      }
     }
   };
 
   const handleComplete = () => {
     clearTimer();
-    const a = audioRef.current;
-    if (a) {
-      a.pause();
-      a.currentTime = 0;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
     }
     router.push("/run/complete");
   };
 
   return (
-    <main className="flex flex-col h-full bg-slate-900 text-white overflow-hidden relative">
-      <audio ref={audioRef} src={DEMO_AUDIO_PATH} preload="auto" />
+    <main className="flex flex-col min-h-screen bg-slate-900 text-white">
+      <div className="flex-1 flex flex-col justify-center items-center text-center px-6 space-y-10">
+        {audioStatus && (
+          <div className="px-4 py-2 rounded-full bg-white/10 text-xs font-bold text-slate-300">
+            {audioStatus}
+          </div>
+        )}
 
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/40 z-10 pointer-events-none" />
-        <GoogleMapCanvas
-          className="h-full w-full opacity-60"
-          defaultCenter={route?.coordinates[0] ?? [35.671, 139.695]}
-          defaultZoom={14}
-          routeCoordinates={route?.coordinates ?? []}
-        />
-      </div>
-
-      <div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-6 space-y-12">
         <div className="space-y-3">
           <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">経過時間</div>
           <div className="text-7xl font-mono font-black tracking-tighter tabular-nums text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
@@ -141,14 +145,14 @@ export default function RunActiveClient() {
         <div className="grid grid-cols-2 gap-8 w-full max-w-xs mx-auto">
           <div className="flex flex-col items-center">
             <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">距離</div>
-            <div className="text-4xl font-black tabular-nums text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">
+            <div className="text-4xl font-black tabular-nums text-green-400">
               {distanceKm.toFixed(2)}
               <span className="text-lg font-bold text-green-400/70 ml-1">km</span>
             </div>
           </div>
           <div className="flex flex-col items-center">
             <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">目標</div>
-            <div className="text-4xl font-black tabular-nums text-blue-400 drop-shadow-[0_0_10px_rgba(96,165,250,0.3)]">
+            <div className="text-4xl font-black tabular-nums text-blue-400">
               {TARGET_KM}
               <span className="text-lg font-bold text-blue-400/70 ml-1">km</span>
             </div>
@@ -165,12 +169,12 @@ export default function RunActiveClient() {
         )}
       </div>
 
-      <div className="relative z-10 py-12 flex flex-col items-center gap-6 px-6">
+      <div className="py-12 flex flex-col items-center gap-6 px-6">
         {!started ? (
           <button
             type="button"
             onClick={handleStart}
-            className="w-full max-w-xs py-4 bg-green-500 text-slate-900 rounded-full font-black text-lg shadow-[0_0_30px_rgba(74,222,128,0.3)] hover:bg-green-400 transition-all active:scale-95"
+            className="w-full max-w-xs py-5 bg-green-500 text-slate-900 rounded-full font-black text-lg shadow-[0_0_30px_rgba(74,222,128,0.3)] hover:bg-green-400 transition-all active:scale-95"
           >
             スタート（伴走音声を再生）
           </button>
