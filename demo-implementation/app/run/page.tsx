@@ -107,71 +107,90 @@ function RunActiveContent() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen max-w-md mx-auto bg-primary text-primary-foreground p-6">
-      <header className="py-4 flex justify-between items-center mb-8">
-        <button onClick={() => router.back()} className="p-2 -ml-2" disabled={isFinishing}>
-          <ChevronLeft />
+    <main className="flex flex-col min-h-screen max-w-md mx-auto bg-blue-600 text-white overflow-hidden relative">
+      {/* Background decoration */}
+      <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-blue-500 to-transparent opacity-50 pointer-events-none" />
+      <div className="absolute -right-32 -top-32 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -left-32 top-1/4 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl pointer-events-none" />
+
+      <header className="relative z-10 py-6 px-6 flex justify-between items-center">
+        <button onClick={() => router.back()} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm" disabled={isFinishing}>
+          <ChevronLeft size={24} />
         </button>
-        <div className="flex items-center bg-white/10 px-4 py-2 rounded-full">
-          <div className={cn("w-2 h-2 rounded-full mr-2", isRunning ? "bg-green-400 animate-pulse" : "bg-yellow-400")} />
+        <div className="flex items-center bg-white/15 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 shadow-sm">
+          <div className={cn("w-2.5 h-2.5 rounded-full mr-2.5 shadow-sm", isRunning ? "bg-green-400 animate-pulse shadow-green-400/50" : "bg-yellow-400")} />
           <span className="text-xs font-bold uppercase tracking-widest">
             {isFinishing ? "Saving..." : isRunning ? "Running" : "Paused"}
           </span>
         </div>
-        <button onClick={() => setIsAudioOn(!isAudioOn)} className="p-2 -mr-2" disabled={isFinishing}>
-          {isAudioOn ? <Volume2 /> : <VolumeX />}
+        <button onClick={() => setIsAudioOn(!isAudioOn)} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm" disabled={isFinishing}>
+          {isAudioOn ? <Volume2 size={20} /> : <VolumeX size={20} />}
         </button>
       </header>
 
-      <div className="flex-1 flex flex-col justify-center items-center text-center space-y-12">
-        <div className="space-y-2">
-          <div className="text-sm font-medium opacity-60 uppercase tracking-widest">経過時間</div>
-          <div className="text-7xl font-mono font-bold tracking-tighter">{formatTime(elapsedSeconds)}</div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-12 w-full">
-          <div className="space-y-1">
-            <div className="text-xs font-medium opacity-60 uppercase tracking-widest">距離</div>
-            <div className="text-4xl font-bold">{(distanceMeters / 1000).toFixed(2)} <span className="text-lg">km</span></div>
-          </div>
-          <div className="space-y-1">
-            <div className="text-xs font-medium opacity-60 uppercase tracking-widest">現在のペース</div>
-            <div className="text-4xl font-bold">{currentPace} <span className="text-lg">/km</span></div>
+      <div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-6 space-y-12">
+        <div className="space-y-3">
+          <div className="text-sm font-bold text-blue-200 uppercase tracking-widest">経過時間</div>
+          <div className="text-7xl font-mono font-black tracking-tighter tabular-nums drop-shadow-md">
+            {formatTime(elapsedSeconds)}
           </div>
         </div>
 
-        <div className="w-full bg-white/10 p-6 rounded-3xl flex items-center space-x-4">
-          <div className="bg-accent p-3 rounded-2xl">
-            <MapPin size={24} className="text-white" />
+        <div className="grid grid-cols-2 gap-8 w-full max-w-xs mx-auto">
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-lg">
+            <div className="text-xs font-bold text-blue-200 uppercase tracking-widest mb-2">距離</div>
+            <div className="text-4xl font-black tabular-nums">
+              {(distanceMeters / 1000).toFixed(2)}
+              <span className="text-lg font-bold text-blue-200 ml-1">km</span>
+            </div>
           </div>
-          <div className="text-left">
-            <div className="text-xs font-bold opacity-60 uppercase tracking-widest">次は</div>
-            <div className="font-bold">代々木湯 (3.0 km 地点)</div>
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-lg">
+            <div className="text-xs font-bold text-blue-200 uppercase tracking-widest mb-2">ペース</div>
+            <div className="text-4xl font-black tabular-nums">
+              {currentPace}
+              <span className="text-lg font-bold text-blue-200 ml-1">/km</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full max-w-xs mx-auto bg-white/15 backdrop-blur-md p-5 rounded-3xl flex items-center gap-4 border border-white/10 shadow-lg">
+          <div className="w-12 h-12 bg-white text-blue-600 rounded-2xl flex items-center justify-center shadow-inner shrink-0">
+            <MapPin size={24} />
+          </div>
+          <div className="text-left flex-1 min-w-0">
+            <div className="text-xs font-bold text-blue-200 uppercase tracking-widest mb-0.5">次は</div>
+            <div className="font-bold text-lg truncate">代々木湯</div>
+            <div className="text-sm text-blue-100 font-medium">3.0 km 地点</div>
           </div>
         </div>
       </div>
 
-      <div className="py-10 flex justify-center items-center space-x-8">
+      <div className="relative z-10 py-12 flex justify-center items-center gap-8">
         {!isFinishing ? (
           <>
             <button
               onClick={() => setIsRunning(!isRunning)}
-              className="w-20 h-20 flex items-center justify-center bg-white text-primary rounded-full shadow-xl active:scale-95 transition-all"
+              className={cn(
+                "w-24 h-24 flex items-center justify-center rounded-full shadow-2xl transition-all active:scale-95 border-4",
+                isRunning 
+                  ? "bg-white text-blue-600 border-white hover:bg-blue-50" 
+                  : "bg-blue-500 text-white border-blue-400 hover:bg-blue-400"
+              )}
             >
-              {isRunning ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" className="ml-1" />}
+              {isRunning ? <Pause size={36} fill="currentColor" /> : <Play size={36} fill="currentColor" className="ml-2" />}
             </button>
             
             <button
               onClick={handleFinish}
-              className="w-16 h-16 flex items-center justify-center bg-red-500 text-white rounded-full shadow-xl active:scale-95 transition-all"
+              className="w-16 h-16 flex items-center justify-center bg-white/20 text-white rounded-full shadow-lg backdrop-blur-md border border-white/30 hover:bg-red-500 hover:border-red-400 transition-all active:scale-95 group"
             >
-              <Square size={24} fill="currentColor" />
+              <Square size={24} fill="currentColor" className="group-hover:scale-110 transition-transform" />
             </button>
           </>
         ) : (
-          <div className="flex flex-col items-center space-y-2">
-            <Loader2 className="animate-spin" size={48} />
-            <span className="text-sm font-bold">保存中...</span>
+          <div className="flex flex-col items-center space-y-4 bg-white/20 backdrop-blur-md p-8 rounded-3xl border border-white/20">
+            <Loader2 className="animate-spin text-white" size={48} />
+            <span className="text-sm font-bold tracking-widest uppercase text-white">データを保存中...</span>
           </div>
         )}
       </div>
@@ -181,7 +200,7 @@ function RunActiveContent() {
 
 export default function RunActivePage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-blue-600 text-white font-bold">Loading...</div>}>
       <RunActiveContent />
     </Suspense>
   );

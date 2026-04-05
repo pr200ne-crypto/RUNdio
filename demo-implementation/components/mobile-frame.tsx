@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 export default function MobileFrame({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const isLp = pathname === "/lp";
+  const isLp = pathname.startsWith("/lp");
 
   if (isLp) {
     return <>{children}</>;
