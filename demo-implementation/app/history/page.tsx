@@ -53,7 +53,7 @@ export default function HistoryPage() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen max-w-md mx-auto bg-slate-50 text-slate-800">
+    <main className="flex flex-col min-h-screen max-w-md mx-auto bg-slate-50 text-slate-800 shadow-2xl relative">
       <header className="p-4 flex items-center bg-white border-b border-slate-100 sticky top-0 z-10 shadow-sm">
         <Link href="/home" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 text-slate-500 transition-colors">
           <ChevronLeft size={24} />

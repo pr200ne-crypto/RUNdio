@@ -108,7 +108,7 @@ function RunActiveContent() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen max-w-md mx-auto bg-blue-600 text-white overflow-hidden relative">
+    <main className="flex flex-col h-full bg-blue-600 text-white overflow-hidden relative">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-blue-500 to-transparent opacity-50 pointer-events-none" />
       <div className="absolute -right-32 -top-32 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />

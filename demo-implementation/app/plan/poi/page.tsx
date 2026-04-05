@@ -133,7 +133,7 @@ function PlanPoiContent() {
   }, [route, searchNearbyPlaces]);
 
   return (
-    <main className="flex flex-col h-screen max-w-md mx-auto bg-slate-50 overflow-hidden text-slate-800">
+    <main className="flex flex-col h-full bg-slate-50 overflow-hidden text-slate-800">
       <header className="p-4 flex items-center bg-white border-b border-slate-100 z-10 shadow-sm">
         <Link href={`/plan/route?routeId=${routeId}`} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 text-slate-500 transition-colors">
           <ChevronLeft size={24} />

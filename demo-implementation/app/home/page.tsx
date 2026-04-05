@@ -3,7 +3,7 @@ import { Play, History, Settings, ChevronRight, User } from "lucide-react";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800 pb-12">
+    <main className="min-h-screen bg-slate-50 text-slate-800 pb-12 max-w-md mx-auto shadow-2xl relative">
       {/* Header */}
       <header className="pt-12 pb-8 px-6">
         <div className="flex items-center justify-between mb-8">

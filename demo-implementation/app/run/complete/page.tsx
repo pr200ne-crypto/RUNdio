@@ -20,7 +20,7 @@ function RunCompleteContent() {
   const avgPace = duration > 0 ? (duration / (distance / 1000) / 60).toFixed(2).replace(".", "'") + "\"" : "0'00\"";
 
   return (
-    <main className="flex flex-col min-h-screen max-w-md mx-auto bg-slate-50 text-slate-800">
+    <main className="flex flex-col min-h-screen bg-slate-50 text-slate-800 shadow-2xl relative">
       <header className="pt-16 pb-8 px-6 text-center">
         <div className="relative inline-flex items-center justify-center w-28 h-28 bg-blue-100 text-blue-600 rounded-full mb-6 shadow-inner">
           <div className="absolute inset-0 bg-blue-600/10 rounded-full animate-ping" />
