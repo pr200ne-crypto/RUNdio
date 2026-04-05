@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { SignOutButton } from "@/components/SignOutButton";
 
 export default function PlanLayout({
   children,
@@ -19,7 +18,7 @@ export default function PlanLayout({
           <span>·</span>
           <Link href="/plan/confirm" className="hover:text-blue-600 transition-colors">確認</Link>
         </nav>
-        <SignOutButton />
+        <div className="w-8" /> {/* バランス調整用 */}
       </header>
       <main className="flex-1 flex flex-col relative">{children}</main>
     </div>

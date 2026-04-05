@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { SignOutButton } from "@/components/SignOutButton";
 
 export default function RunLayout({
   children,
@@ -13,7 +12,7 @@ export default function RunLayout({
           RUNdio
         </Link>
         <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs font-bold tracking-widest">走行中</span>
-        <SignOutButton />
+        <div className="w-8" /> {/* バランス調整用 */}
       </header>
       <div className="flex-1 flex flex-col relative">{children}</div>
     </div>
