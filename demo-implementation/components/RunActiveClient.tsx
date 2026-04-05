@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   DEMO_AUDIO_PATH,
   milestoneLabelAtKm,
 } from "@/lib/demo-audio";
+import GoogleMapCanvas from "@/components/GoogleMapCanvas";
 
 const TARGET_KM = 10;
 /** 疑似ランで 10km に到達するまでの秒数（デモ用） */
@@ -20,11 +21,23 @@ function formatTime(totalSec: number): string {
 
 export default function RunActiveClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const routeId = searchParams.get("routeId");
+  
+  const [route, setRoute] = useState<any>(null);
   const [started, setStarted] = useState(false);
   const [paused, setPaused] = useState(false);
   const [elapsedSec, setElapsedSec] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (routeId) {
+      fetch("/data/routes.json")
+        .then((res) => res.json())
+        .then((data) => setRoute(data.find((r: any) => r.id === routeId)));
+    }
+  }, [routeId]);
 
   const distanceKm = started
     ? Math.min(TARGET_KM, (elapsedSec / DEMO_DURATION_SEC) * TARGET_KM)
@@ -81,7 +94,8 @@ export default function RunActiveClient() {
     const a = audioRef.current;
     if (a) {
       a.currentTime = 0;
-      void a.play().catch(() => {});
+      a.volume = 1.0;
+      void a.play().catch((e) => { console.error("Audio play failed:", e); });
     }
   };
 
@@ -104,9 +118,14 @@ export default function RunActiveClient() {
       <audio ref={audioRef} src={DEMO_AUDIO_PATH} preload="auto" />
 
       {/* Background Map / Decoration */}
-      <div className="absolute inset-0 z-0 opacity-30">
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent z-10" />
-        <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1000')] bg-cover bg-center" />
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/40 z-10 pointer-events-none" />
+        <GoogleMapCanvas
+          className="h-full w-full opacity-60"
+          defaultCenter={route?.coordinates[0] ?? [35.671, 139.695]}
+          defaultZoom={14}
+          routeCoordinates={route?.coordinates ?? []}
+        />
       </div>
 
       <div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-6 space-y-12">
