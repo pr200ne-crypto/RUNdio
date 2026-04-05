@@ -78,7 +78,7 @@ export default function LpPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-blue-200">
       {/* Floating Nav */}
-      <nav className="fixed top-4 left-4 right-4 md:left-1/2 md:-translate-x-1/2 md:w-[600px] bg-white/70 backdrop-blur-xl z-50 rounded-full border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] px-4 py-3 flex items-center justify-between">
+      <nav className="sticky top-4 mx-4 bg-white/70 backdrop-blur-xl z-50 rounded-full border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2 pl-2">
           <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shadow-inner">
             <Play fill="white" size={12} className="text-white ml-0.5" />
@@ -103,7 +103,7 @@ export default function LpPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 md:pt-48 md:pb-32 overflow-hidden relative">
+      <section className="pt-32 pb-20 px-4 overflow-hidden relative min-h-screen flex flex-col justify-center">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-blue-400/20 rounded-full blur-3xl -z-10" />
         
         <div className="max-w-4xl mx-auto text-center relative z-10">
@@ -121,7 +121,7 @@ export default function LpPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl md:text-7xl font-black tracking-tighter text-slate-900 leading-[1.1] mb-6"
+            className="text-5xl font-black tracking-tighter text-slate-900 leading-[1.1] mb-6"
           >
             走る。<span className="text-blue-600">聴く。</span><br />
             もっと、楽しむ。
@@ -131,7 +131,7 @@ export default function LpPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg md:text-xl text-slate-500 mb-10 max-w-xl mx-auto leading-relaxed"
+            className="text-lg text-slate-500 mb-10 max-w-xl mx-auto leading-relaxed"
           >
             あなたのペースに合わせたAI実況で、毎日のランニングが特別な体験に変わります。イヤホンをつけて、走り出そう。
           </motion.p>
@@ -200,12 +200,12 @@ export default function LpPage() {
       {/* App-like Features Grid */}
       <section className="py-20 px-4 max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl font-black text-slate-900 tracking-tight">
             すべてが新しい<br />ランニング体験
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {/* Card 1 */}
           <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col items-center text-center hover:shadow-xl transition-shadow">
             <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6">
@@ -218,7 +218,7 @@ export default function LpPage() {
           </div>
 
           {/* Card 2 */}
-          <div className="bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-900/10 flex flex-col items-center text-center md:-translate-y-4">
+          <div className="bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-900/10 flex flex-col items-center text-center">
             <div className="w-16 h-16 rounded-2xl bg-white/10 text-white flex items-center justify-center mb-6 border border-white/10">
               <Headphones size={32} />
             </div>
@@ -243,7 +243,7 @@ export default function LpPage() {
 
       {/* Auth Section */}
       <section id="auth" className="py-24 px-4">
-        <div className="max-w-md mx-auto bg-white p-8 md:p-10 rounded-[3rem] shadow-2xl shadow-blue-900/5 border border-slate-100">
+        <div className="max-w-md mx-auto bg-white p-6 rounded-[3rem] shadow-2xl shadow-blue-900/5 border border-slate-100">
           <div className="text-center mb-8">
             <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center mx-auto mb-6 shadow-inner">
               <Play fill="white" size={24} className="text-white ml-1" />

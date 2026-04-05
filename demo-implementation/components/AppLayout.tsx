@@ -9,15 +9,13 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  // LPや認証関連のページではアプリレイアウトを適用しない
+  // LPや認証関連のページではボトムナビゲーションを非表示にする
   const isLpOrAuth = pathname?.startsWith("/lp") || pathname?.startsWith("/auth");
-
-  if (isLpOrAuth) {
-    return <>{children}</>;
-  }
 
   // 走行中画面はボトムナビゲーションを非表示にする
   const isRunActive = pathname?.startsWith("/run") && pathname !== "/run/complete";
+
+  const hideBottomNav = isLpOrAuth || isRunActive;
 
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center sm:p-4 md:p-8">
@@ -47,7 +45,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* ボトムナビゲーション */}
-        {!isRunActive && (
+        {!hideBottomNav && (
           <nav className="shrink-0 bg-white border-t border-slate-100 px-6 py-3 flex items-center justify-between pb-safe z-50 relative">
             <NavItem href="/home" icon={<Home size={24} />} label="ホーム" active={pathname === "/home"} />
             <NavItem href="/plan/route" icon={<Map size={24} />} label="計画" active={pathname?.startsWith("/plan")} />
