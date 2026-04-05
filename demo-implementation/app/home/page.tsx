@@ -72,17 +72,21 @@ export default function HomePage() {
         </div>
         
         <div className="flex gap-4 overflow-x-auto pb-4 pr-6 no-scrollbar snap-x">
-          {[1, 2, 3].map((i) => (
-            <Link key={i} href="/history" className="snap-center shrink-0 w-64 bg-white rounded-3xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition-all active:scale-[0.98]">
+          {[
+            { id: 1, date: "昨日", time: "32:14", name: "隅田川テラスコース", distance: "5.2" },
+            { id: 2, date: "3日前", time: "28:45", name: "皇居外周コース", distance: "5.0" },
+            { id: 3, date: "1週間前", time: "21:10", name: "代々木公園周回", distance: "3.5" }
+          ].map((run) => (
+            <Link key={run.id} href="/history" className="snap-center shrink-0 w-64 bg-white rounded-3xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition-all active:scale-[0.98]">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-xs font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-lg">昨日</div>
-                <div className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">32:14</div>
+                <div className="text-xs font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-lg">{run.date}</div>
+                <div className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">{run.time}</div>
               </div>
-              <h4 className="font-bold text-slate-800 mb-4 truncate">隅田川テラスコース</h4>
+              <h4 className="font-bold text-slate-800 mb-4 truncate">{run.name}</h4>
               <div className="flex items-end justify-between">
                 <div>
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">距離</div>
-                  <div className="text-2xl font-black text-slate-900 leading-none">5.2<span className="text-xs font-bold text-slate-500 ml-0.5">km</span></div>
+                  <div className="text-2xl font-black text-slate-900 leading-none">{run.distance}<span className="text-xs font-bold text-slate-500 ml-0.5">km</span></div>
                 </div>
                 <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
                   <ChevronRight size={16} />

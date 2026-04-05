@@ -100,98 +100,82 @@ export default function RunActiveClient() {
   };
 
   return (
-    <main className="run-client-main">
+    <main className="flex flex-col h-full bg-slate-900 text-white overflow-hidden relative">
       <audio ref={audioRef} src={DEMO_AUDIO_PATH} preload="auto" />
 
-      <p style={{ color: "#9aa7b2", fontSize: "0.875rem", marginBottom: "0.5rem" }}>
-        走行中（疑似）
-      </p>
-      <h1 style={{ fontSize: "1.5rem", marginBottom: "1.5rem" }}>伴走ラジオ</h1>
+      {/* Background Map / Decoration */}
+      <div className="absolute inset-0 z-0 opacity-30">
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent z-10" />
+        <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1000')] bg-cover bg-center" />
+      </div>
 
-      <div
-        style={{
-          background: "#1a222c",
-          borderRadius: 12,
-          padding: "1.25rem",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <div style={{ fontSize: "2.25rem", fontWeight: 700, marginBottom: "0.25rem" }}>
-          {distanceKm.toFixed(2)} km
+      <div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-6 space-y-12">
+        <div className="space-y-3">
+          <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">経過時間</div>
+          <div className="text-7xl font-mono font-black tracking-tighter tabular-nums text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+            {formatTime(elapsedSec)}
+          </div>
         </div>
-        <div style={{ color: "#9aa7b2", fontSize: "0.9rem" }}>
-          目標 {TARGET_KM} km ・ 経過 {formatTime(elapsedSec)}
+
+        <div className="grid grid-cols-2 gap-8 w-full max-w-xs mx-auto">
+          <div className="flex flex-col items-center">
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">距離</div>
+            <div className="text-4xl font-black tabular-nums text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">
+              {distanceKm.toFixed(2)}
+              <span className="text-lg font-bold text-green-400/70 ml-1">km</span>
+            </div>
+          </div>
+          <div className="flex flex-col items-center">
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">目標</div>
+            <div className="text-4xl font-black tabular-nums text-blue-400 drop-shadow-[0_0_10px_rgba(96,165,250,0.3)]">
+              {TARGET_KM}
+              <span className="text-lg font-bold text-blue-400/70 ml-1">km</span>
+            </div>
+          </div>
         </div>
+
         {segmentLabel && (
-          <div style={{ marginTop: "0.75rem", fontSize: "0.85rem", color: "#7eb8da" }}>
-            台本の位置（目安）: {segmentLabel}
+          <div className="w-full max-w-xs mx-auto bg-white/10 backdrop-blur-md p-4 rounded-2xl flex items-center justify-center gap-3 border border-white/20">
+            <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
+            <div className="font-bold text-sm text-slate-200">
+              現在: {segmentLabel}
+            </div>
           </div>
         )}
       </div>
 
-      {!started ? (
-        <button
-          type="button"
-          onClick={handleStart}
-          style={{
-            width: "100%",
-            padding: "1rem",
-            fontSize: "1rem",
-            fontWeight: 600,
-            border: "none",
-            borderRadius: 10,
-            background: "#2a6fa5",
-            color: "#fff",
-            cursor: "pointer",
-          }}
-        >
-          スタート（伴走音声を再生）
-        </button>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+      <div className="relative z-10 py-12 flex flex-col items-center gap-6">
+        {!started ? (
           <button
             type="button"
-            onClick={handlePauseToggle}
-            style={{
-              padding: "0.85rem",
-              fontWeight: 600,
-              borderRadius: 10,
-              border: "1px solid #3d4f5f",
-              background: "#1a222c",
-              color: "#e7ecf1",
-              cursor: "pointer",
-            }}
+            onClick={handleStart}
+            className="w-full max-w-xs py-4 bg-green-500 text-slate-900 rounded-full font-black text-lg shadow-[0_0_30px_rgba(74,222,128,0.3)] hover:bg-green-400 transition-all active:scale-95"
           >
-            {paused ? "再開" : "一時停止"}
+            スタート（伴走音声を再生）
           </button>
-          <button
-            type="button"
-            onClick={handleComplete}
-            style={{
-              padding: "0.85rem",
-              fontWeight: 600,
-              borderRadius: 10,
-              border: "none",
-              background: "#3d2a50",
-              color: "#e7ecf1",
-              cursor: "pointer",
-            }}
-          >
-            終了して完了画面へ
-          </button>
-        </div>
-      )}
-
-      <p style={{ marginTop: "2rem", fontSize: "0.8rem", color: "#6b7883" }}>
-        音声は <code style={{ color: "#9aa7b2" }}>{DEMO_AUDIO_PATH}</code>
-        。ブラウザの自動再生制限のため、再生は「スタート」操作から始まります。
-      </p>
-
-      <p style={{ marginTop: "1rem" }}>
-        <Link href="/home" style={{ color: "#7eb8da", fontSize: "0.9rem" }}>
-          ホームへ
-        </Link>
-      </p>
+        ) : (
+          <div className="flex items-center gap-6">
+            <button
+              type="button"
+              onClick={handlePauseToggle}
+              className="w-20 h-20 flex items-center justify-center rounded-full bg-slate-800 text-white border-2 border-slate-700 hover:bg-slate-700 transition-all active:scale-95"
+            >
+              {paused ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" className="ml-1"><path d="M5 3l14 9-14 9V3z"/></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={handleComplete}
+              className="w-20 h-20 flex items-center justify-center rounded-full bg-red-500/20 text-red-500 border-2 border-red-500/50 hover:bg-red-500 hover:text-white transition-all active:scale-95"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg>
+            </button>
+          </div>
+        )}
+      </div>
     </main>
   );
 }
