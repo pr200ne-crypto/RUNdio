@@ -2,7 +2,7 @@
  * 伴走ラジオ（ElevenLabs 生成の単一 MP3）。
  * ファイル名を変えたらここと public/audio/ を揃える。
  */
-export const DEMO_AUDIO_FILENAME = "rundio-companion.mp3" as const;
+export const DEMO_AUDIO_FILENAME = "rundio-companion.wav" as const;
 
 export const DEMO_AUDIO_PATH = `/audio/${DEMO_AUDIO_FILENAME}` as const;
 
