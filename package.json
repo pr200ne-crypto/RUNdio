@@ -1,0 +1,10 @@
+{
+  "name": "sample-project",
+  "private": true,
+  "description": "このフォルダを開いているときはここで npm run dev",
+  "scripts": {
+    "dev": "npm run dev --prefix demo-implementation",
+    "build": "npm run build --prefix demo-implementation",
+    "start": "npm run start --prefix demo-implementation"
+  }
+}

@@ -1,0 +1,25 @@
+[
+  {
+    "id": "route-001",
+    "name": "代々木公園周回コース",
+    "distance": 5000,
+    "polyline": "encoded_polyline_yoyogi",
+    "coordinates": [
+      [35.671, 139.695],
+      [35.672, 139.696],
+      [35.673, 139.697],
+      [35.674, 139.698]
+    ]
+  },
+  {
+    "id": "route-002",
+    "name": "皇居一周コース",
+    "distance": 5000,
+    "polyline": "encoded_polyline_imperial",
+    "coordinates": [
+      [35.685, 139.752],
+      [35.686, 139.753],
+      [35.687, 139.754]
+    ]
+  }
+]

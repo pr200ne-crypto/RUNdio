@@ -1,0 +1,20 @@
+[
+  {
+    "id": "bath-001",
+    "name": "代々木湯",
+    "category": "public_bath",
+    "lat": 35.672,
+    "lng": 139.696,
+    "description": "昔ながらの銭湯。サウナあり。",
+    "distanceFromRoute": 150
+  },
+  {
+    "id": "bath-002",
+    "name": "富の湯",
+    "category": "public_bath",
+    "lat": 35.674,
+    "lng": 139.698,
+    "description": "清潔感のある銭湯。水風呂が冷たい。",
+    "distanceFromRoute": 300
+  }
+]
