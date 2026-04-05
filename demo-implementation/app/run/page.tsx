@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Pause, Play, Square, Volume2, VolumeX, MapPin, ChevronLeft } from "lucide-react";
+import { Pause, Play, Square, Volume2, VolumeX, MapPin, ChevronLeft, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function RunActiveContent() {
@@ -18,6 +18,7 @@ function RunActiveContent() {
   const [isAudioOn, setIsAudioOn] = useState(true);
   const [lastAnnouncedKm, setLastAnnouncedKm] = useState(0);
   const [poiAnnounced, setPoiAnnounced] = useState(false);
+  const [isFinishing, setIsFinishing] = useState(false);
 
   // 疑似ペース: 1km = 6分 (360秒)
   const paceSecondsPerKm = 360;
@@ -39,14 +40,14 @@ function RunActiveContent() {
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (isRunning) {
+    if (isRunning && !isFinishing) {
       interval = setInterval(() => {
         setElapsedSeconds((prev) => prev + 1);
         setDistanceMeters((prev) => prev + metersPerSecond);
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [isRunning, metersPerSecond]);
+  }, [isRunning, isFinishing, metersPerSecond]);
 
   // 音声通知ロジック
   useEffect(() => {
@@ -72,23 +73,52 @@ function RunActiveContent() {
 
   const currentPace = "6'00\"";
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
+    if (isFinishing) return;
+    setIsFinishing(true);
     setIsRunning(false);
-    speak("お疲れ様でした！今日のランニング番組、これにて終了です。");
-    router.push(`/run/complete?distance=${distanceMeters}&duration=${elapsedSeconds}`);
+    
+    speak("お疲れ様でした！今日のランニング番組、これにて終了です。データを保存しています。");
+
+    try {
+      const response = await fetch('/api/sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          route_id: routeId,
+          distance_meters: Math.round(distanceMeters),
+          duration_seconds: elapsedSeconds,
+          poi_id: poiId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save session');
+      }
+
+      router.push(`/run/complete?distance=${distanceMeters}&duration=${elapsedSeconds}`);
+    } catch (error) {
+      console.error('Error saving session:', error);
+      // エラー時も完了画面へ（オフライン想定）
+      router.push(`/run/complete?distance=${distanceMeters}&duration=${elapsedSeconds}`);
+    }
   };
 
   return (
     <main className="flex flex-col min-h-screen max-w-md mx-auto bg-primary text-primary-foreground p-6">
       <header className="py-4 flex justify-between items-center mb-8">
-        <button onClick={() => router.back()} className="p-2 -ml-2">
+        <button onClick={() => router.back()} className="p-2 -ml-2" disabled={isFinishing}>
           <ChevronLeft />
         </button>
         <div className="flex items-center bg-white/10 px-4 py-2 rounded-full">
           <div className={cn("w-2 h-2 rounded-full mr-2", isRunning ? "bg-green-400 animate-pulse" : "bg-yellow-400")} />
-          <span className="text-xs font-bold uppercase tracking-widest">{isRunning ? "Running" : "Paused"}</span>
+          <span className="text-xs font-bold uppercase tracking-widest">
+            {isFinishing ? "Saving..." : isRunning ? "Running" : "Paused"}
+          </span>
         </div>
-        <button onClick={() => setIsAudioOn(!isAudioOn)} className="p-2 -mr-2">
+        <button onClick={() => setIsAudioOn(!isAudioOn)} className="p-2 -mr-2" disabled={isFinishing}>
           {isAudioOn ? <Volume2 /> : <VolumeX />}
         </button>
       </header>
@@ -122,19 +152,28 @@ function RunActiveContent() {
       </div>
 
       <div className="py-10 flex justify-center items-center space-x-8">
-        <button
-          onClick={() => setIsRunning(!isRunning)}
-          className="w-20 h-20 flex items-center justify-center bg-white text-primary rounded-full shadow-xl active:scale-95 transition-all"
-        >
-          {isRunning ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" className="ml-1" />}
-        </button>
-        
-        <button
-          onClick={handleFinish}
-          className="w-16 h-16 flex items-center justify-center bg-red-500 text-white rounded-full shadow-xl active:scale-95 transition-all"
-        >
-          <Square size={24} fill="currentColor" />
-        </button>
+        {!isFinishing ? (
+          <>
+            <button
+              onClick={() => setIsRunning(!isRunning)}
+              className="w-20 h-20 flex items-center justify-center bg-white text-primary rounded-full shadow-xl active:scale-95 transition-all"
+            >
+              {isRunning ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" className="ml-1" />}
+            </button>
+            
+            <button
+              onClick={handleFinish}
+              className="w-16 h-16 flex items-center justify-center bg-red-500 text-white rounded-full shadow-xl active:scale-95 transition-all"
+            >
+              <Square size={24} fill="currentColor" />
+            </button>
+          </>
+        ) : (
+          <div className="flex flex-col items-center space-y-2">
+            <Loader2 className="animate-spin" size={48} />
+            <span className="text-sm font-bold">保存中...</span>
+          </div>
+        )}
       </div>
     </main>
   );
