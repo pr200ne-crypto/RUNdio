@@ -29,34 +29,40 @@ export default function PlanRoutePage() {
   const selectedRoute = routes.find((r) => r.id === selectedRouteId);
 
   return (
-    <main className="flex flex-col h-full bg-slate-50 overflow-hidden text-slate-800">
-      <header className="p-4 flex items-center bg-white border-b border-slate-100 z-10 shadow-sm">
-        <Link href="/home" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 text-slate-500 transition-colors">
-          <ChevronLeft size={24} />
-        </Link>
-        <h1 className="flex-1 text-center font-black text-lg tracking-tight">ルートを選択</h1>
-        <div className="w-10" />
-      </header>
-
-      <div className="flex-1 relative">
+    <main className="flex flex-col h-full bg-slate-50 overflow-hidden text-slate-800 relative">
+      {/* Fullscreen Map */}
+      <div className="absolute inset-0 z-0">
         <GoogleMapCanvas
           className="h-full w-full"
           defaultCenter={selectedRoute?.coordinates[0] ?? [35.671, 139.695]}
           defaultZoom={14}
           routeCoordinates={selectedRoute?.coordinates ?? []}
         />
-        
-        {/* Gradient overlay at the bottom of the map to blend with the panel */}
-        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent pointer-events-none" />
       </div>
 
-      <div className="p-6 bg-white rounded-t-3xl shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] relative z-20">
-        <div className="flex items-center gap-2 mb-4">
+      {/* Floating Header */}
+      <header className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between z-10 pointer-events-none">
+        <Link href="/home" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-md text-slate-700 hover:bg-white transition-colors pointer-events-auto">
+          <ChevronLeft size={24} />
+        </Link>
+        <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-md pointer-events-auto">
+          <h1 className="font-black text-sm tracking-tight">ルートを選択</h1>
+        </div>
+        <div className="w-10" />
+      </header>
+
+      {/* Bottom Sheet */}
+      <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-[2.5rem] shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.15)] z-20 flex flex-col max-h-[60vh] pb-safe">
+        <div className="w-full flex justify-center pt-3 pb-2 shrink-0">
+          <div className="w-12 h-1.5 bg-slate-200 rounded-full" />
+        </div>
+        
+        <div className="px-6 pb-2 shrink-0 flex items-center gap-2">
           <MapIcon size={18} className="text-blue-600" />
           <h2 className="font-bold text-slate-900">おすすめルート</h2>
         </div>
         
-        <div className="flex gap-4 overflow-x-auto pb-6 -mx-6 px-6 no-scrollbar snap-x">
+        <div className="flex gap-4 overflow-x-auto pb-6 px-6 no-scrollbar snap-x shrink-0">
           {routes.map((route) => (
             <button
               key={route.id}
@@ -84,16 +90,18 @@ export default function PlanRoutePage() {
           ))}
         </div>
 
-        <Link
-          href={selectedRouteId ? `/plan/poi?routeId=${selectedRouteId}` : "#"}
-          className={cn(
-            "flex items-center justify-center w-full py-4 bg-blue-600 text-white rounded-full font-bold text-lg transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20",
-            !selectedRouteId && "opacity-50 pointer-events-none bg-slate-300 shadow-none"
-          )}
-        >
-          次へ：チェックポイント選定
-          <ChevronRight size={20} className="ml-1" />
-        </Link>
+        <div className="px-6 pb-6 shrink-0">
+          <Link
+            href={selectedRouteId ? `/plan/poi?routeId=${selectedRouteId}` : "#"}
+            className={cn(
+              "flex items-center justify-center w-full py-4 bg-blue-600 text-white rounded-full font-bold text-lg transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20",
+              !selectedRouteId && "opacity-50 pointer-events-none bg-slate-300 shadow-none"
+            )}
+          >
+            次へ：チェックポイント選定
+            <ChevronRight size={20} className="ml-1" />
+          </Link>
+        </div>
       </div>
     </main>
   );

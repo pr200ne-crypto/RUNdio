@@ -104,8 +104,8 @@ function PlanConfirmContent() {
       </div>
 
       {/* Floating Action Button */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-50 via-slate-50 to-transparent z-20">
-        <div className="max-w-md mx-auto">
+      <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-50 via-slate-50 to-transparent z-20">
+        <div className="w-full">
           <Link
             href={`/run?routeId=${routeId}&poiId=${poiId}&poiName=${encodeURIComponent(poi.name)}`}
             className="flex items-center justify-center w-full py-5 bg-blue-600 text-white rounded-full font-black text-xl shadow-xl shadow-blue-600/20 transition-all active:scale-[0.98] hover:bg-blue-700"

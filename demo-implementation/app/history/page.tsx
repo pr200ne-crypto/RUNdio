@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronLeft, History as HistoryIcon, Calendar, Ruler, Clock, ChevronRight, Play } from "lucide-react";
+import { ChevronLeft, History as HistoryIcon, Calendar as CalendarIcon, Ruler, Clock, ChevronRight, Play, List } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Session {
   id: string;
@@ -14,6 +15,7 @@ interface Session {
 export default function HistoryPage() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
 
   useEffect(() => {
     fetch("/api/sessions")
@@ -53,13 +55,29 @@ export default function HistoryPage() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen max-w-md mx-auto bg-slate-50 text-slate-800 shadow-2xl relative">
-      <header className="p-4 flex items-center bg-white border-b border-slate-100 sticky top-0 z-10 shadow-sm">
-        <Link href="/home" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 text-slate-500 transition-colors">
-          <ChevronLeft size={24} />
-        </Link>
-        <h1 className="flex-1 text-center font-black text-lg tracking-tight">アクティビティ履歴</h1>
-        <div className="w-10" />
+    <main className="flex flex-col min-h-screen bg-slate-50 text-slate-800 relative pb-20">
+      <header className="p-4 flex items-center justify-between bg-white border-b border-slate-100 sticky top-0 z-10 shadow-sm">
+        <div className="flex items-center gap-2">
+          <Link href="/home" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 text-slate-500 transition-colors">
+            <ChevronLeft size={24} />
+          </Link>
+          <h1 className="font-black text-lg tracking-tight">アクティビティ</h1>
+        </div>
+        
+        <div className="flex items-center bg-slate-100 p-1 rounded-xl">
+          <button 
+            onClick={() => setViewMode("list")}
+            className={cn("p-2 rounded-lg transition-all", viewMode === "list" ? "bg-white shadow-sm text-blue-600" : "text-slate-400 hover:text-slate-600")}
+          >
+            <List size={18} />
+          </button>
+          <button 
+            onClick={() => setViewMode("calendar")}
+            className={cn("p-2 rounded-lg transition-all", viewMode === "calendar" ? "bg-white shadow-sm text-blue-600" : "text-slate-400 hover:text-slate-600")}
+          >
+            <CalendarIcon size={18} />
+          </button>
+        </div>
       </header>
 
       <div className="flex-1 p-6 space-y-4">
@@ -87,17 +105,22 @@ export default function HistoryPage() {
               ランを開始する
             </Link>
           </div>
+        ) : viewMode === "calendar" ? (
+          <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col items-center justify-center py-20 text-slate-400">
+            <CalendarIcon size={48} className="mb-4 text-blue-200" />
+            <p className="font-bold">カレンダービューは準備中です</p>
+          </div>
         ) : (
           <div className="space-y-4">
             {sessions.map((session) => (
               <div
                 key={session.id}
-                className="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition-all group cursor-pointer"
+                className="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition-all active:scale-[0.98] group cursor-pointer"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2 text-sm font-bold text-slate-500">
                     <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                      <Calendar size={14} />
+                      <CalendarIcon size={14} />
                     </div>
                     {formatDate(session.created_at)}
                   </div>
@@ -106,32 +129,32 @@ export default function HistoryPage() {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-6 mb-4">
-                  <div className="flex-1 bg-slate-50 p-4 rounded-2xl">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center mb-1">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="flex-1 bg-slate-50 p-4 rounded-2xl border border-slate-100/50">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center mb-1">
                       <Ruler size={12} className="mr-1" /> 距離
                     </div>
-                    <div className="text-2xl font-black text-slate-900 tabular-nums">
-                      {(session.distance_meters / 1000).toFixed(2)} <span className="text-sm font-bold text-slate-500 ml-0.5">km</span>
+                    <div className="text-2xl font-black text-slate-900 tabular-nums leading-none">
+                      {(session.distance_meters / 1000).toFixed(2)} <span className="text-xs font-bold text-slate-500 ml-0.5">km</span>
                     </div>
                   </div>
                   
-                  <div className="flex-1 bg-slate-50 p-4 rounded-2xl">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center mb-1">
+                  <div className="flex-1 bg-slate-50 p-4 rounded-2xl border border-slate-100/50">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center mb-1">
                       <Clock size={12} className="mr-1" /> タイム
                     </div>
-                    <div className="text-2xl font-black text-slate-900 tabular-nums">
+                    <div className="text-2xl font-black text-slate-900 tabular-nums leading-none">
                       {formatTime(session.duration_seconds)}
                     </div>
                   </div>
                 </div>
 
                 <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
-                  <div className="text-sm font-bold text-slate-400">
+                  <div className="text-xs font-bold text-slate-400 bg-slate-50 px-3 py-1.5 rounded-lg">
                     ペース: {(session.duration_seconds / (session.distance_meters / 1000) / 60).toFixed(2).replace(".", "'") + "\""}/km
                   </div>
-                  <button className="text-sm font-bold text-blue-600 flex items-center group-hover:translate-x-1 transition-transform">
-                    詳細 <ChevronRight size={16} className="ml-0.5" />
+                  <button className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-all">
+                    <ChevronRight size={16} />
                   </button>
                 </div>
               </div>

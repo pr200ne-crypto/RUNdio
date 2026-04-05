@@ -108,19 +108,19 @@ function RunActiveContent() {
   };
 
   return (
-    <main className="flex flex-col h-full bg-blue-600 text-white overflow-hidden relative">
+    <main className="flex flex-col h-full bg-black text-white overflow-hidden relative">
       {/* Background decoration */}
-      <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-blue-500 to-transparent opacity-50 pointer-events-none" />
-      <div className="absolute -right-32 -top-32 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -left-32 top-1/4 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-green-500/20 to-transparent opacity-50 pointer-events-none" />
+      <div className="absolute -right-32 -top-32 w-96 h-96 bg-green-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -left-32 top-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <header className="relative z-10 py-6 px-6 flex justify-between items-center">
         <button onClick={() => router.back()} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm" disabled={isFinishing}>
           <ChevronLeft size={24} />
         </button>
-        <div className="flex items-center bg-white/15 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 shadow-sm">
-          <div className={cn("w-2.5 h-2.5 rounded-full mr-2.5 shadow-sm", isRunning ? "bg-green-400 animate-pulse shadow-green-400/50" : "bg-yellow-400")} />
-          <span className="text-xs font-bold uppercase tracking-widest">
+        <div className="flex items-center bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/5 shadow-sm">
+          <div className={cn("w-2.5 h-2.5 rounded-full mr-2.5 shadow-sm", isRunning ? "bg-green-400 animate-pulse shadow-[0_0_10px_rgba(74,222,128,0.8)]" : "bg-yellow-400")} />
+          <span className="text-xs font-bold uppercase tracking-widest text-slate-200">
             {isFinishing ? "Saving..." : isRunning ? "Running" : "Paused"}
           </span>
         </div>
@@ -131,37 +131,37 @@ function RunActiveContent() {
 
       <div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-6 space-y-12">
         <div className="space-y-3">
-          <div className="text-sm font-bold text-blue-200 uppercase tracking-widest">経過時間</div>
-          <div className="text-7xl font-mono font-black tracking-tighter tabular-nums drop-shadow-md">
+          <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">経過時間</div>
+          <div className="text-7xl font-mono font-black tracking-tighter tabular-nums text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
             {formatTime(elapsedSeconds)}
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-8 w-full max-w-xs mx-auto">
-          <div className="bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-lg">
-            <div className="text-xs font-bold text-blue-200 uppercase tracking-widest mb-2">距離</div>
-            <div className="text-4xl font-black tabular-nums">
+          <div className="flex flex-col items-center">
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">距離</div>
+            <div className="text-4xl font-black tabular-nums text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">
               {(distanceMeters / 1000).toFixed(2)}
-              <span className="text-lg font-bold text-blue-200 ml-1">km</span>
+              <span className="text-lg font-bold text-green-400/70 ml-1">km</span>
             </div>
           </div>
-          <div className="bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-lg">
-            <div className="text-xs font-bold text-blue-200 uppercase tracking-widest mb-2">ペース</div>
-            <div className="text-4xl font-black tabular-nums">
+          <div className="flex flex-col items-center">
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">ペース</div>
+            <div className="text-4xl font-black tabular-nums text-blue-400 drop-shadow-[0_0_10px_rgba(96,165,250,0.3)]">
               {currentPace}
-              <span className="text-lg font-bold text-blue-200 ml-1">/km</span>
+              <span className="text-lg font-bold text-blue-400/70 ml-1">/km</span>
             </div>
           </div>
         </div>
 
-        <div className="w-full max-w-xs mx-auto bg-white/15 backdrop-blur-md p-5 rounded-3xl flex items-center gap-4 border border-white/10 shadow-lg">
-          <div className="w-12 h-12 bg-white text-blue-600 rounded-2xl flex items-center justify-center shadow-inner shrink-0">
+        <div className="w-full max-w-xs mx-auto bg-white/5 backdrop-blur-md p-5 rounded-3xl flex items-center gap-4 border border-white/10">
+          <div className="w-12 h-12 bg-slate-800 text-green-400 rounded-2xl flex items-center justify-center shrink-0 border border-white/5">
             <MapPin size={24} />
           </div>
           <div className="text-left flex-1 min-w-0">
-            <div className="text-xs font-bold text-blue-200 uppercase tracking-widest mb-0.5">次は</div>
-            <div className="font-bold text-lg truncate">{poiName}</div>
-            <div className="text-sm text-blue-100 font-medium">3.0 km 地点</div>
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">次は</div>
+            <div className="font-bold text-lg truncate text-slate-200">{poiName}</div>
+            <div className="text-sm text-slate-500 font-medium">3.0 km 地点</div>
           </div>
         </div>
       </div>
@@ -174,8 +174,8 @@ function RunActiveContent() {
               className={cn(
                 "w-24 h-24 flex items-center justify-center rounded-full shadow-2xl transition-all active:scale-95 border-4",
                 isRunning 
-                  ? "bg-white text-blue-600 border-white hover:bg-blue-50" 
-                  : "bg-blue-500 text-white border-blue-400 hover:bg-blue-400"
+                  ? "bg-green-500 text-black border-green-400 hover:bg-green-400 shadow-[0_0_30px_rgba(74,222,128,0.4)]" 
+                  : "bg-slate-800 text-white border-slate-700 hover:bg-slate-700"
               )}
             >
               {isRunning ? <Pause size={36} fill="currentColor" /> : <Play size={36} fill="currentColor" className="ml-2" />}
@@ -183,15 +183,15 @@ function RunActiveContent() {
             
             <button
               onClick={handleFinish}
-              className="w-16 h-16 flex items-center justify-center bg-white/20 text-white rounded-full shadow-lg backdrop-blur-md border border-white/30 hover:bg-red-500 hover:border-red-400 transition-all active:scale-95 group"
+              className="w-16 h-16 flex items-center justify-center bg-slate-800 text-white rounded-full shadow-lg border border-slate-700 hover:bg-red-500 hover:border-red-400 hover:text-white transition-all active:scale-95 group"
             >
               <Square size={24} fill="currentColor" className="group-hover:scale-110 transition-transform" />
             </button>
           </>
         ) : (
-          <div className="flex flex-col items-center space-y-4 bg-white/20 backdrop-blur-md p-8 rounded-3xl border border-white/20">
-            <Loader2 className="animate-spin text-white" size={48} />
-            <span className="text-sm font-bold tracking-widest uppercase text-white">データを保存中...</span>
+          <div className="flex flex-col items-center space-y-4 bg-slate-900 p-8 rounded-3xl border border-slate-800">
+            <Loader2 className="animate-spin text-green-400" size={48} />
+            <span className="text-sm font-bold tracking-widest uppercase text-slate-400">データを保存中...</span>
           </div>
         )}
       </div>
