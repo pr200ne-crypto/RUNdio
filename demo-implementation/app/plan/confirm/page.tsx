@@ -5,20 +5,33 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ChevronLeft, Play, MapPin, Clock, Ruler, Settings2 } from "lucide-react";
 
+interface JsonRoute {
+  id: string;
+  name: string;
+  distance?: number;
+  coordinates: [number, number][];
+}
+
+interface JsonPoi {
+  id: string;
+  name: string;
+  description?: string;
+}
+
 function PlanConfirmContent() {
   const searchParams = useSearchParams();
   const routeId = searchParams.get("routeId");
   const poiId = searchParams.get("poiId");
   const poiName = searchParams.get("poiName");
 
-  const [route, setRoute] = useState<any>(null);
-  const [poi, setPoi] = useState<any>(null);
+  const [route, setRoute] = useState<JsonRoute | null>(null);
+  const [poi, setPoi] = useState<JsonPoi | null>(null);
 
   useEffect(() => {
     if (routeId) {
       fetch("/data/routes.json")
         .then((res) => res.json())
-        .then((data) => setRoute(data.find((r: any) => r.id === routeId)));
+        .then((data: JsonRoute[]) => setRoute(data.find((r) => r.id === routeId) ?? null));
     }
     if (poiId) {
       // APIから取得したPOIの場合はURLパラメータから名前を取得して仮のPOIオブジェクトを作成
@@ -32,7 +45,7 @@ function PlanConfirmContent() {
         // フォールバック: ローカルデータから検索
         fetch("/data/pois.json")
           .then((res) => res.json())
-          .then((data) => setPoi(data.find((p: any) => p.id === poiId)));
+          .then((data: JsonPoi[]) => setPoi(data.find((p) => p.id === poiId) ?? null));
       }
     }
   }, [routeId, poiId, poiName]);
@@ -59,7 +72,7 @@ function PlanConfirmContent() {
             <h2 className="text-sm font-bold text-slate-500">コース</h2>
           </div>
           <div className="text-2xl font-black text-slate-900 mb-1">{route.name}</div>
-          <div className="text-blue-600 font-bold text-lg">{(route.distance / 1000).toFixed(1)} <span className="text-sm">km</span></div>
+          <div className="text-blue-600 font-bold text-lg">{((route.distance ?? 0) / 1000).toFixed(1)} <span className="text-sm">km</span></div>
         </section>
 
         {/* POI Summary */}

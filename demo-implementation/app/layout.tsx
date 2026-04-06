@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Noto_Sans_JP } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
 import AppLayout from "@/components/AppLayout";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { isClerkConfigured } from "@/lib/clerk-config";
 
 const noto = Noto_Sans_JP({
   subsets: ["latin"],
@@ -38,21 +40,33 @@ export const metadata: Metadata = {
   },
 };
 
+function AppShell({ children }: { children: React.ReactNode }) {
+  return (
+    <Providers>
+      <ErrorBoundary>
+        <AppLayout>{children}</AppLayout>
+      </ErrorBoundary>
+    </Providers>
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const clerkOn = isClerkConfigured();
+
   return (
     <html lang="ja" className={noto.className}>
       <body>
-        <Providers>
-          <ErrorBoundary>
-            <AppLayout>
-              {children}
-            </AppLayout>
-          </ErrorBoundary>
-        </Providers>
+        {clerkOn ? (
+          <ClerkProvider>
+            <AppShell>{children}</AppShell>
+          </ClerkProvider>
+        ) : (
+          <AppShell>{children}</AppShell>
+        )}
       </body>
     </html>
   );

@@ -33,8 +33,8 @@ export default function LpPattern2() {
         alert('確認メールを送信しました。')
       }
       router.push('/home')
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err))
     } finally {
       setLoading(false)
     }
@@ -49,8 +49,8 @@ export default function LpPattern2() {
         options: { redirectTo: `${window.location.origin}/auth/callback` }
       })
       if (error) throw error
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err))
       setLoading(false)
     }
   }

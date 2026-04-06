@@ -81,7 +81,7 @@ export default function RunActiveClient() {
       a.addEventListener("canplaythrough", () => {
         setAudioStatus("再生中");
       });
-      a.addEventListener("error", (e) => {
+      a.addEventListener("error", () => {
         setAudioStatus("音声読み込みエラー: " + (a.error?.message || "不明"));
       });
       a.addEventListener("ended", () => {
@@ -92,11 +92,12 @@ export default function RunActiveClient() {
         .then(() => {
           setAudioStatus("再生中");
         })
-        .catch((e) => {
+        .catch((e: Error) => {
           setAudioStatus("再生エラー: " + e.message);
         });
-    } catch (e: any) {
-      setAudioStatus("Audio生成エラー: " + e.message);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setAudioStatus("Audio生成エラー: " + msg);
     }
   };
 
@@ -129,6 +130,9 @@ export default function RunActiveClient() {
   return (
     <main className="flex flex-col min-h-screen bg-slate-900 text-white">
       <div className="flex-1 flex flex-col justify-center items-center text-center px-6 space-y-10">
+        {routeId && (
+          <p className="text-xs text-slate-500">routeId: {routeId}</p>
+        )}
         {audioStatus && (
           <div className="px-4 py-2 rounded-full bg-white/10 text-xs font-bold text-slate-300">
             {audioStatus}

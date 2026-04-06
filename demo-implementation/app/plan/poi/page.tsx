@@ -39,8 +39,9 @@ function PlanPoiContent() {
     if (routeId) {
       fetch("/data/routes.json")
         .then((res) => res.json())
-        .then((data) => {
-          const found = data.find((r: any) => r.id === routeId);
+        .then((data: unknown) => {
+          const list = data as Route[];
+          const found = list.find((r) => r.id === routeId);
           if (found) setRoute(found);
         });
     }

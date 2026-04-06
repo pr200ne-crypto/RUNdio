@@ -73,7 +73,7 @@ export default function GoogleMapCanvas({
   routeCoordinates = [],
   markers = [],
 }: GoogleMapCanvasProps) {
-  const [map, setMap] = useState<any>(null)
+  const [map, setMap] = useState<google.maps.Map | null>(null)
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? ''
   const routePath = useMemo(() => sanitizePath(routeCoordinates), [routeCoordinates])
   const markerPoints = useMemo(

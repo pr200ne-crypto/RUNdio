@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Play, History, Settings, ChevronRight, User, Activity, Flame, Award } from "lucide-react";
+import { Play, Settings, ChevronRight, User, Activity, Flame, Award } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -40,7 +40,7 @@ export default function HomePage() {
           <div className="bg-purple-50/50 p-4 rounded-2xl flex flex-col items-center justify-center border border-purple-100/50">
             <Award size={18} className="text-purple-500 mb-1" />
             <span className="text-xs font-bold text-slate-500 mb-0.5">ペース</span>
-            <div className="text-lg font-black text-slate-900 tabular-nums">5'45"</div>
+            <div className="text-lg font-black text-slate-900 tabular-nums">5&apos;45&quot;</div>
           </div>
         </div>
       </header>
