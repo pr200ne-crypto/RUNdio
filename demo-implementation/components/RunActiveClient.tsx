@@ -1,8 +1,10 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import GoogleMapCanvas from "@/components/GoogleMapCanvas";
 import { milestoneLabelAtKm } from "@/lib/demo-audio";
+import { pointAlongRoute, type LatLngTuple } from "@/lib/route-path";
 
 const AUDIO_URL = "/audio/rundio-companion.mp3";
 const TARGET_KM = 10;
@@ -14,6 +16,12 @@ function formatTime(totalSec: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+type JsonRoute = {
+  id: string;
+  name: string;
+  coordinates: LatLngTuple[];
+};
+
 export default function RunActiveClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -23,12 +31,57 @@ export default function RunActiveClient() {
   const [paused, setPaused] = useState(false);
   const [elapsedSec, setElapsedSec] = useState(0);
   const [audioStatus, setAudioStatus] = useState("");
+  const [routeCoords, setRouteCoords] = useState<LatLngTuple[]>([]);
+  const [routeName, setRouteName] = useState<string | null>(null);
+  const [routeLoading, setRouteLoading] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (!routeId) {
+      setRouteCoords([]);
+      setRouteName(null);
+      return;
+    }
+    setRouteLoading(true);
+    fetch("/data/routes.json")
+      .then((res) => res.json())
+      .then((data: JsonRoute[]) => {
+        const found = data.find((r) => r.id === routeId);
+        setRouteCoords(found?.coordinates ?? []);
+        setRouteName(found?.name ?? null);
+      })
+      .catch(() => {
+        setRouteCoords([]);
+        setRouteName(null);
+      })
+      .finally(() => setRouteLoading(false));
+  }, [routeId]);
 
   const distanceKm = started
     ? Math.min(TARGET_KM, (elapsedSec / DEMO_DURATION_SEC) * TARGET_KM)
     : 0;
+
+  const progressAlongRoute = started
+    ? Math.min(1, distanceKm / TARGET_KM)
+    : 0;
+
+  const runnerPosition = useMemo(() => {
+    if (routeCoords.length === 0) return null;
+    return pointAlongRoute(routeCoords, progressAlongRoute);
+  }, [routeCoords, progressAlongRoute]);
+
+  const mapMarkers = useMemo(() => {
+    if (!runnerPosition) return [];
+    return [
+      {
+        id: "runner",
+        position: runnerPosition,
+        title: started ? "いまここ" : "スタート",
+        selected: true,
+      },
+    ];
+  }, [runnerPosition, started]);
 
   const reachedGoal = started && distanceKm >= TARGET_KM - 1e-6;
   const segmentLabel = started ? milestoneLabelAtKm(distanceKm) : null;
@@ -129,9 +182,31 @@ export default function RunActiveClient() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-900 text-white">
-      <div className="flex-1 flex flex-col justify-center items-center text-center px-6 space-y-10">
-        {routeId && (
-          <p className="text-xs text-slate-500">routeId: {routeId}</p>
+      {routeId && (
+        <div className="h-[min(38vh,260px)] w-full shrink-0 border-b border-white/10 bg-slate-950">
+          {routeLoading ? (
+            <div className="h-full flex items-center justify-center text-slate-500 text-sm font-medium">
+              コースを読み込み中…
+            </div>
+          ) : routeCoords.length > 0 ? (
+            <GoogleMapCanvas
+              className="h-full w-full"
+              defaultCenter={routeCoords[0]}
+              defaultZoom={14}
+              routeCoordinates={routeCoords}
+              markers={mapMarkers}
+            />
+          ) : (
+            <div className="h-full flex items-center justify-center text-slate-500 text-sm text-center px-4">
+              コースデータが見つかりません
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="flex-1 flex flex-col justify-center items-center text-center px-6 space-y-10 min-h-0">
+        {routeName && (
+          <p className="text-sm font-bold text-slate-400 tracking-tight">{routeName}</p>
         )}
         {audioStatus && (
           <div className="px-4 py-2 rounded-full bg-white/10 text-xs font-bold text-slate-300">
