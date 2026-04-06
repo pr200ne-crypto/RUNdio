@@ -6,7 +6,7 @@ export default function RunLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-slate-50 relative flex flex-col">
+    <div className="flex-1 bg-slate-50 relative flex flex-col min-h-0">
       <header className="bg-white border-b border-slate-100 p-4 flex items-center justify-between sticky top-0 z-50">
         <Link href="/home" className="font-extrabold text-blue-600 tracking-tight">
           RUNdio

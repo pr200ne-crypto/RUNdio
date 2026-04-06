@@ -3,6 +3,7 @@ import { Noto_Sans_JP } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
 import AppLayout from "@/components/AppLayout";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const noto = Noto_Sans_JP({
   subsets: ["latin"],
@@ -46,9 +47,11 @@ export default function RootLayout({
     <html lang="ja" className={noto.className}>
       <body>
         <Providers>
-          <AppLayout>
-            {children}
-          </AppLayout>
+          <ErrorBoundary>
+            <AppLayout>
+              {children}
+            </AppLayout>
+          </ErrorBoundary>
         </Providers>
       </body>
     </html>

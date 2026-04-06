@@ -29,7 +29,7 @@ export default function PlanRoutePage() {
   const selectedRoute = routes.find((r) => r.id === selectedRouteId);
 
   return (
-    <main className="flex flex-col h-full bg-slate-50 overflow-hidden text-slate-800 relative">
+    <main className="flex flex-col flex-1 bg-slate-50 overflow-hidden text-slate-800 relative" style={{ minHeight: 0 }}>
       {/* Fullscreen Map */}
       <div className="absolute inset-0 z-0">
         <GoogleMapCanvas

@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { GoogleMap, MarkerF, PolylineF, useJsApiLoader } from '@react-google-maps/api'
 
+const GOOGLE_MAPS_LIBRARIES: ("places" | "geometry")[] = ['places', 'geometry']
+
 type LatLngTuple = [number, number]
 
 type MapMarker = {
@@ -61,7 +63,7 @@ export default function GoogleMapCanvas({
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: apiKey,
-    libraries: ['places', 'geometry'], // Places API と Geometry ライブラリを追加
+    libraries: GOOGLE_MAPS_LIBRARIES,
   })
 
   useEffect(() => {
