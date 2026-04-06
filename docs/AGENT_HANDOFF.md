@@ -1,9 +1,11 @@
 # エージェント向けハンドオフ（次回再開用）
 
-**最終更新**: 2026-04-04 — 版 0.2 同期済み。**続き・並行作業・NotebookLM 音声**は [`continuation-checkpoint-2026-04-04.md`](./continuation-checkpoint-2026-04-04.md) を参照。  
-**プロジェクトルート（目安）**: フォルダ名 **`RUNdio/`**（直下に `README.md`・`docs/`・`demo-implementation/`）。旧パス `go!cierge` / `sample_project (1)/sample_project/` は廃止。
+**最終更新**: 2026-04-09 — **正規の GitHub・本番 URL・Supabase** は [`CANONICAL.md`](./CANONICAL.md) を参照（GitHub: [pr200ne-crypto/RUNdio](https://github.com/pr200ne-crypto/RUNdio)、本番: [ru-ndio.vercel.app](https://ru-ndio.vercel.app)）。**次タスク一覧**: [`NEXT_TASKS.md`](./NEXT_TASKS.md)。
 
-**Cursor**: 作業フォルダは **`RUNdio` を開く**こと。旧 `go!cierge` は Cursor を閉じたうえで削除してよい（開いたままだとリネームできない場合がある）。
+**最終更新（旧）**: 2026-04-04 — 版 0.2 同期済み。**続き・並行作業・NotebookLM 音声**は [`continuation-checkpoint-2026-04-04.md`](./continuation-checkpoint-2026-04-04.md) を参照。  
+**プロジェクトルート（目安）**: GitHub では **リポジトリ直下**に `README.md`・`docs/`・`demo-implementation/`。手元で `runradio/sample_project/` 配下にある場合は、**`demo-implementation` の `git remote` が上記 GitHub か**を確認すること。旧パス `sample_project (1)/sample_project/` は廃止。
+
+**Cursor**: 実装の正は **`runradio` の `sample_project/demo-implementation`**（Google マップ連載あり）。デスクトップの別コピー **`RUNdio`** は閉じて触らない運用でよい。
 
 このファイルは **別チャット／別エージェント** が文脈なしで再開するための要約である。詳細はリンク先のドキュメントを読むこと。
 

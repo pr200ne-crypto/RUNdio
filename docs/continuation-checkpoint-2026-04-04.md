@@ -9,8 +9,8 @@
 | 項目 | 状態 |
 |------|------|
 | **プロダクト名** | **RUNdio**（英語）／**ランディオ**（日本語）。キャッチ: **ラン×レディオ：あなただけのランニング用ラジオ** |
-| **ブランディング** | Go!cierge は廃止。コンセプトは「ラジオ番組」軸（コンシェルジュは使わない） |
-| **フォルダ** | 正はデスクトップの **`RUNdio/`**（`README.md`・`docs/`・`demo-implementation/` が直下）。旧 `go!cierge` は削除可 |
+| **ブランディング** | **RUNdio** を正式名称とする。コンセプトは「ラジオ番組」軸（コンシェルジュは使わない） |
+| **フォルダ** | **GitHub** と同じ構成は [pr200ne-crypto/RUNdio](https://github.com/pr200ne-crypto/RUNdio)（ルート直下に `demo-implementation/`）。手元は **`runradio/sample_project/demo-implementation`** を正とする。別コピーの `RUNdio` は触らない |
 | **要件** | **`docs/output/system_requirements.md`** / **`detailed_requirements_specification.md`** は **版 0.2**（Web デモ・Leaflet+OSM・POI モック・疑似走行・低コスト音声） |
 | **NotebookLM** | ユーザーが **Audio Overview 作成中**（待ち時間あり）。仕様は下記プロンプトファイル |
 

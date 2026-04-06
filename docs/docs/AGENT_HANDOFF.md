@@ -1,7 +1,9 @@
 # エージェント向けハンドオフ（次回再開用）
 
-**最終更新**: 2026-04-04 — `docs/output/system_requirements.md` / `detailed_requirements_specification.md` を **版 0.2（Web デモ・低コスト）** に同期済み。  
-**プロジェクトルート（目安）**: フォルダ名 **`RUNdio/`**（リポジトリ直下に `docs/`・`demo-implementation/` がある構成）。旧パス `go!cierge` / `sample_project (1)/sample_project/` は使わない。
+**最終更新**: 2026-04-09 — **正規リソース**は上位の [`../CANONICAL.md`](../CANONICAL.md) を参照（GitHub / 本番 URL / Supabase）。
+
+**最終更新（旧）**: 2026-04-04 — `docs/output/system_requirements.md` / `detailed_requirements_specification.md` を **版 0.2（Web デモ・低コスト）** に同期済み。  
+**プロジェクトルート（目安）**: リポジトリ直下に `docs/`・`demo-implementation/`。手元は `runradio/sample_project` を正とする。旧パス `sample_project (1)/sample_project/` は使わない。
 
 このファイルは **別チャット／別エージェント** が文脈なしで再開するための要約である。詳細はリンク先のドキュメントを読むこと。
 

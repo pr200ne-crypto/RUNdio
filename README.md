@@ -4,6 +4,13 @@
 - **日本語**: ランディオ  
 - **キャッチコピー**: ラン×レディオ：あなただけのランニング用ラジオ
 
+## 正規リソース（必読）
+
+- **GitHub**: [pr200ne-crypto/RUNdio](https://github.com/pr200ne-crypto/RUNdio)
+- **本番 URL**: [https://ru-ndio.vercel.app](https://ru-ndio.vercel.app)
+- **詳細（ローカルパス・Supabase 等）**: [docs/CANONICAL.md](docs/CANONICAL.md)
+- **次にやること一覧**: [docs/NEXT_TASKS.md](docs/NEXT_TASKS.md)
+
 ## ドキュメント
 
 - 要件入力の索引: [docs/input/README.md](docs/input/README.md)
@@ -11,4 +18,4 @@
 
 ## 実装
 
-- [demo-implementation/](demo-implementation/)（Next.js 拡張想定）
+- アプリ本体: [demo-implementation/](demo-implementation/)（Next.js）。**GitHub 上はリポジトリ直下の `demo-implementation/` が正**（手元で `sample_project/` 配下にある場合は、コミット対象のパスに注意）。

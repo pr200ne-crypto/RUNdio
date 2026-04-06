@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "RUNdio | パーソナル・ランニング・ラジオ",
     description: "あなたのペースに合わせたAI実況で、毎日のランニングが特別な体験に変わります。",
-    url: "https://demo-implementation.vercel.app",
+    url: "https://ru-ndio.vercel.app",
     siteName: "RUNdio",
     images: [
       {
