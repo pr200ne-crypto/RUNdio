@@ -24,6 +24,11 @@ Vercel の Project Settings → Environment Variables と、ローカルの `dem
 - `NEXT_PUBLIC_SUPABASE_URL` — Supabase の Project URL（ダッシュボードの API 設定から取得）
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — anon public key
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` — Google Cloud Console で発行
+- （任意）`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` / `CLERK_SECRET_KEY` — 設定時は **Clerk** でミドルウェア保護。未設定時は **Supabase** の `updateSession` のみ（`/lp`・`/auth` は公開）
+
+## マージ履歴（2026-04-09）
+
+手元の `main` と `origin/main`（unrelated histories）を `merge --allow-unrelated-histories` で統合済み。**LP・計画・Google Maps・伴走 MP3（RunActiveClient）**は手元実装を優先。**Clerk** は `sign-in` / `sign-up` と任意の環境変数で有効化。未使用だった **Leaflet の RunMap** は依存を増やさないため削除。
 
 ## Git の注意（ローカルと GitHub が食い違うとき）
 
