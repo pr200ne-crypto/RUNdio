@@ -23,8 +23,33 @@ type GoogleMapCanvasProps = {
   markers?: MapMarker[]
 }
 
-function toLatLngLiteral([lat, lng]: LatLngTuple) {
+function isFiniteCoord(lat: unknown, lng: unknown): lat is number {
+  return typeof lat === 'number' && typeof lng === 'number' && Number.isFinite(lat) && Number.isFinite(lng)
+}
+
+type LatLngLiteral = { lat: number; lng: number }
+
+function toLatLngLiteral(tuple: LatLngTuple): LatLngLiteral | null {
+  const [lat, lng] = tuple
+  if (!isFiniteCoord(lat, lng)) return null
   return { lat, lng }
+}
+
+/** 無効な頂点を除いたパス（Polyline の setPath / 内部 MVCArray 破損を防ぐ） */
+function sanitizePath(coords: LatLngTuple[] | undefined): LatLngLiteral[] {
+  if (!coords?.length) return []
+  const out: LatLngLiteral[] = []
+  for (const t of coords) {
+    const p = toLatLngLiteral(t)
+    if (p) out.push(p)
+  }
+  return out
+}
+
+const TOKYO_DEFAULT: LatLngLiteral = { lat: 35.672, lng: 139.696 }
+
+function literalOrDefault(tuple: LatLngTuple): LatLngLiteral {
+  return toLatLngLiteral(tuple) ?? TOKYO_DEFAULT
 }
 
 function getMarkerIcon(selected?: boolean) {
@@ -50,14 +75,44 @@ export default function GoogleMapCanvas({
 }: GoogleMapCanvasProps) {
   const [map, setMap] = useState<any>(null)
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? ''
-  const routePath = useMemo(() => routeCoordinates.map(toLatLngLiteral), [routeCoordinates])
+  const routePath = useMemo(() => sanitizePath(routeCoordinates), [routeCoordinates])
   const markerPoints = useMemo(
     () =>
-      markers.map((marker) => ({
-        ...marker,
-        latLng: toLatLngLiteral(marker.position),
-      })),
+      markers
+        .map((marker) => {
+          const latLng = toLatLngLiteral(marker.position)
+          if (!latLng) return null
+          return { ...marker, latLng }
+        })
+        .filter((m): m is MapMarker & { latLng: LatLngLiteral } => m !== null),
     [markers]
+  )
+
+  const mapOptions = useMemo(
+    () => ({
+      disableDefaultUI: true,
+      zoomControl: true,
+      fullscreenControl: false,
+      streetViewControl: false,
+      mapTypeControl: false,
+      clickableIcons: false,
+      gestureHandling: 'greedy' as const,
+    }),
+    []
+  )
+
+  const polylineOptions = useMemo(
+    () => ({
+      strokeColor: '#2563eb',
+      strokeOpacity: 0.9,
+      strokeWeight: 6,
+    }),
+    []
+  )
+
+  const polylineKey = useMemo(
+    () => routePath.map((p) => `${p.lat.toFixed(5)},${p.lng.toFixed(5)}`).join('|'),
+    [routePath]
   )
 
   const { isLoaded, loadError } = useJsApiLoader({
@@ -71,7 +126,7 @@ export default function GoogleMapCanvas({
 
     const points = [...routePath, ...markerPoints.map((marker) => marker.latLng)]
     if (points.length === 0) {
-      map.setCenter(toLatLngLiteral(defaultCenter))
+      map.setCenter(literalOrDefault(defaultCenter))
       map.setZoom(defaultZoom)
       return
     }
@@ -84,7 +139,12 @@ export default function GoogleMapCanvas({
 
     const bounds = new window.google.maps.LatLngBounds()
     points.forEach((point) => bounds.extend(point))
-    map.fitBounds(bounds, 56)
+    try {
+      map.fitBounds(bounds, 56)
+    } catch {
+      map.setCenter(points[0])
+      map.setZoom(defaultZoom)
+    }
   }, [defaultCenter, defaultZoom, isLoaded, map, markerPoints, routePath])
 
   if (!apiKey) {
@@ -116,27 +176,16 @@ export default function GoogleMapCanvas({
   return (
     <GoogleMap
       mapContainerClassName={className}
-      center={toLatLngLiteral(defaultCenter)}
+      center={literalOrDefault(defaultCenter)}
       zoom={defaultZoom}
       onLoad={(loadedMap) => setMap(loadedMap)}
-      options={{
-        disableDefaultUI: true,
-        zoomControl: true,
-        fullscreenControl: false,
-        streetViewControl: false,
-        mapTypeControl: false,
-        clickableIcons: false,
-        gestureHandling: 'greedy',
-      }}
+      options={mapOptions}
     >
       {routePath.length > 0 && (
         <PolylineF
+          key={polylineKey}
           path={routePath}
-          options={{
-            strokeColor: '#2563eb',
-            strokeOpacity: 0.9,
-            strokeWeight: 6,
-          }}
+          options={polylineOptions}
         />
       )}
 
