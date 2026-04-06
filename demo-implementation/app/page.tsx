@@ -16,7 +16,8 @@ export default function HomePage() {
           </p>
         </div>
         <p className="text-sm text-slate-600 dark:text-slate-400">
-          要件 0.2 デモ — ルートはプリセット、POI はモック JSON、走行はブラウザ内擬似です。
+          ログイン後に今日のコースを組み、走行中は距離・時間に合わせた音声ガイドで伴走します。地図は
+          OpenStreetMap、施設はデモ用データです。
         </p>
         <div className="flex flex-col gap-3">
           <Link

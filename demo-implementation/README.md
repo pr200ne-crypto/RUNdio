@@ -29,6 +29,9 @@ npm run dev
 - 音声プレースホルダ: `public/audio/`（`README.txt` 参照）。未配置時は距離キューがビープ音にフォールバック
 - 地図: Leaflet + OpenStreetMap（帰属は `DemoFooter`）
 
-## 旧サンプル（Clerk + middleware）
+## 認証（Clerk / Google 等）
 
-Clerk 連携の `proxy.ts` と `auth-helpers` は **`_legacy/`** に退避しています。0.2 デモでは未使用。Supabase クライアント用の `lib/supabase/` は将来用に同梱（環境変数未設定でも本デモの画面は動作します）。
+- **`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`** と **`CLERK_SECRET_KEY`** の両方を設定すると、ミドルウェアで `/plan`・`/run`・`/settings` が保護され、ヘッダーにログイン／`UserButton` が出ます。Google ログインは [Clerk Dashboard](https://dashboard.clerk.com) の **User & Authentication → Social connections** で Google を有効化してください。
+- どちらか一方でも欠ける場合は認証をオフにしたモードで動作し（本番のフォールバック）、画面はそのまま閲覧できます。
+
+旧サンプル用の `proxy.ts`（命名のみ）相当の処理は **`middleware.ts`** に集約しています。`lib/supabase/auth-helpers.ts` は Clerk＋Supabase 同期用（Service Role 必須）。

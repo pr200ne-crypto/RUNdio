@@ -1,16 +1,9 @@
 import { createBrowserClient } from '@supabase/ssr'
-
-function supabaseAnonKey(): string {
-  return (
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY ??
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
-    ''
-  )
-}
+import { getSupabaseAnonKey } from './anon-env'
 
 export function createClient() {
   return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    supabaseAnonKey()
+    getSupabaseAnonKey()
   )
 }
