@@ -1,0 +1,20 @@
+{
+  "category": "public_bath",
+  "label": "入浴施設（モック）",
+  "items": [
+    {
+      "id": "demo-onsen-1",
+      "name": "〇〇の湯（デモ）",
+      "lat": 35.6912,
+      "lng": 139.7045,
+      "distanceFromRouteM": 280
+    },
+    {
+      "id": "demo-spa-2",
+      "name": "△△スパ（デモ）",
+      "lat": 35.6965,
+      "lng": 139.711,
+      "distanceFromRouteM": 750
+    }
+  ]
+}
