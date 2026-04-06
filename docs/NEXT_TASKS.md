@@ -22,5 +22,6 @@
 
 ## 参照
 
+- **新エージェント向け（2026-04-09 マージまで）**: [HANDOFF_NEXT_AGENT_2026-04-09.md](./HANDOFF_NEXT_AGENT_2026-04-09.md)
 - 正規 URL・フォルダの説明: [CANONICAL.md](./CANONICAL.md)
 - エージェント向け全体: [AGENT_HANDOFF.md](./AGENT_HANDOFF.md)
