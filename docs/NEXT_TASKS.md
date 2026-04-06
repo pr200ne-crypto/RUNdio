@@ -2,6 +2,10 @@
 
 発表・提出に向けたチェックリスト。**上から順**がおすすめ。
 
+## リポジトリ（先に状況確認）
+
+0. [ ] **`git push` が通るか** — `sample_project` で `git fetch origin` → `git log main..origin/main` / `git log origin/main..main` で差分を確認。分岐が大きい場合は [`CANONICAL.md` の Git の注意](./CANONICAL.md#git-の注意ローカルと-github-が食い違うとき) を読む。**force push はしない**。
+
 ## 実装・デプロイ
 
 1. [ ] **本番で動線確認** — [https://ru-ndio.vercel.app](https://ru-ndio.vercel.app) で LP → ログイン → 計画 → 走行 → 音声再生まで通す。

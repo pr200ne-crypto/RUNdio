@@ -25,6 +25,10 @@ Vercel の Project Settings → Environment Variables と、ローカルの `dem
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — anon public key
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` — Google Cloud Console で発行
 
+## Git の注意（ローカルと GitHub が食い違うとき）
+
+`git push` が拒否されたり、`origin/main` が **force-push された履歴**とローカルが大きく分岐している場合は、**勝手に `push --force` しない**。`git fetch origin` のうえ、`git log origin/main` と手元の `main` を比較し、必要なコミットだけ `cherry-pick` するか、チームで方針を決めてからマージする。
+
 ## 更新履歴
 
 - 2026-04-09: 本番 URL を `ru-ndio.vercel.app`、GitHub / Supabase をユーザー指定で固定。
